@@ -7,6 +7,8 @@ import App from './App';
 //import reportWebVitals from './reportWebVitals';
 //Import Reducers
 import reducers from './reducers';
+//Import global styles
+import './index.css';
 //Set Redux Store
 const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
