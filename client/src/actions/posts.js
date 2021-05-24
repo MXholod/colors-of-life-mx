@@ -34,3 +34,11 @@ export const createPost = (post)=> async (dispatch)=> {
         console.log(e.message);
     }
 }
+export const updatePost = (id, post)=> async (dispatch)=> {
+    try{
+        const { data } = await api.updatePost(id, post);
+        dispatch({ type: 'UPDATE_POST', payload: data });
+    }catch(e){
+        console.log(e.message);
+    }
+}
