@@ -1,28 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FileBase from 'react-file-base64';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import useStyles from './styles';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
-import { createPost } from './../../actions/posts';
+import { createPost, updatePost } from './../../actions/posts';
 
-const Form = ()=>{
+const Form = ({ currentId, setCurrentId })=>{
   const classes = useStyles();
   const [postData, setPostData] = useState({
     creator:'', title:'', message:'', tags:'', selectedFile:''
   });
   const dispatch = useDispatch();
+  const post = useSelector( state => currentId ? state.posts.find(post => post._id === currentId) : null );
+
+  useEffect(()=>{
+    if(post){
+      setPostData(post);
+    }
+  },[post]);
+
   const handleSubmit = (e)=>{
     e.preventDefault();
-    //Dispatching an action
-    dispatch(createPost(postData));
+    if(currentId){
+      //Dispatching an action
+      dispatch(updatePost(currentId, postData))
+    }else{
+      //Dispatching an action
+      dispatch(createPost(postData));
+    }
+    clearForm();
   };
   const clearForm = ()=>{
-
+    // State in App component
+    setCurrentId(null);
+    // Local state
+    setPostData({
+      creator:'', title:'', message:'', tags:'', selectedFile:''
+    });
   };
   return (
     <Paper className={ classes.paper }>
       <form autoComplete="off" noValidate className={ `${classes.root} ${classes.form}` } onSubmit={handleSubmit}>
-        <Typography variant="h6">Creating an Event of life</Typography>
+        <Typography variant="h6">{currentId ? 'Editing' : 'Creating'} an Event of life</Typography>
         <TextField 
           name="creator" 
           variant="outlined" 
