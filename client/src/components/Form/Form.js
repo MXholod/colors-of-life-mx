@@ -8,7 +8,7 @@ import { createPost, updatePost } from './../../actions/posts';
 const Form = ({ currentId, setCurrentId })=>{
   const classes = useStyles();
   const [postData, setPostData] = useState({
-    creator:'', title:'', message:'', tags:'', selectedFile:''
+    creator:'', title:'', message:'', tags: '', selectedFile:''
   });
   const dispatch = useDispatch();
   const post = useSelector( state => currentId ? state.posts.find(post => post._id === currentId) : null );
@@ -72,7 +72,7 @@ const Form = ({ currentId, setCurrentId })=>{
           label="Tags" 
           fullWidth 
           value={postData.tags}
-          onChange={ (e)=> setPostData({ ...postData, tags: e.target.value }) }
+          onChange={ (e)=> setPostData({ ...postData, tags: e.target.value.split(',') }) }
         />
         <div className={ classes.fileInput }>
           <FileBase 
