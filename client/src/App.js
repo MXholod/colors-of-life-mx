@@ -16,7 +16,7 @@ const App = ()=>{
   useEffect(()=>{
     //Pass getPosts() to the Reducer
     dispatch(getPosts());
-  },[currentId, dispatch]);
+  },[dispatch]);//[currentId, dispatch]
 
   return (
     <Container maxWidth="lg">

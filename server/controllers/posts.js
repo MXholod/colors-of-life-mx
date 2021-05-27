@@ -25,12 +25,15 @@ export const createPost = async (req, res)=>{
 }
 
 export const updatePost = async (req, res)=>{
-    const { id: _id } = req.params;
+    const { id } = req.params;
     const post = req.body;
-    //Checking '_id' is mongoose id
-    if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('There is no post');
+    //Checking 'id' is mongoose id
+    if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('There is no post');
     try{
-        const updatedPost = await PostMessage.findOneAndUpdate(_id, { ...post, _id }, { new : true });
+        const {tags, creator, title, message, selectedFile} = post;
+        const updatedPost = await PostMessage.findByIdAndUpdate(id, {
+            tags, creator, title, message, selectedFile, id
+        }, { new : true });
         res.status(200).json(updatedPost);
     }catch(e){
         res.status(404).json({ message: e.message });
@@ -55,7 +58,7 @@ export const likePost = async (req, res)=>{
     if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('There is no post');
     try{
         const post = await PostMessage.findById(_id);
-        const postUpdated = await PostMessage.findOneAndUpdate(_id, { likeCount: (post.likeCount + 1) }, { new: true });
+        const postUpdated = await PostMessage.findByIdAndUpdate(_id, { likeCount: (post.likeCount + 1) }, { new: true });
         res.status(200).json({ message: "Post updated successfully", postUpdated });
     }catch(e){
         res.status(404).json({ message: e.message });
