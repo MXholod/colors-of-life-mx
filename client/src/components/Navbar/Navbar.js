@@ -1,13 +1,29 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { AppBar, Avatar, Typography, Toolbar, Button } from '@material-ui/core';
 import Rainbow from './../../images/Rainbow.jpg';
 import useStyles from './styles';
+import { useDispatch } from 'react-redux';
+import { LOGOUT } from './../../constants/actionTypes';
 
 const Navbar = ()=>{
   const classes = useStyles();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
+  
+  useEffect(()=>{
+    const token = user?.token;//If token exists
+    //JWT...
+    setUser(JSON.parse(localStorage.getItem('profile')));
+  },[location]);
 
-  const user = null;
+  const userLogout = ()=>{
+    dispatch({ type: LOGOUT });
+    setUser(null);
+    history.push('/');
+  };
 
   return (
     <AppBar className={ classes.appBar } position="static" color="inherit">
@@ -26,12 +42,12 @@ const Navbar = ()=>{
                 { user.result.name.charAt(0) }
               </Avatar>
               <Typography className={ classes.userName } variant="h6">{ user.result.name }</Typography>
-              <Button variant="contained" className={ classes.logout } color="secondary">
+              <Button variant="contained" className={ classes.logout } color="secondary" onClick={ userLogout }>
                 Logout
               </Button>
             </div>
           ) : (
-            <Button component={ Link } to="/auth" variant="contained"  color="primary" className={ classes.logout }>
+            <Button component={ Link } to="/auth" variant="contained"  color="primary">
               Sign in
             </Button>
           )
