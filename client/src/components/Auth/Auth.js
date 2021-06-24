@@ -4,7 +4,7 @@ import useStyles from './styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Input from './Input';
 import { GoogleLogin } from 'react-google-login';
-import Icon from './icon';
+import Icon from './Icon';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import { AUTH } from './../../constants/actionTypes';
