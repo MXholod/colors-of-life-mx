@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import settings from  './config';
 //Routers
 import postRoutes from './routes/posts'; 
+import userRoutes from './routes/users'; 
 
 const app = express();
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
 app.use(cors());
 //Register routes
 app.use('/posts', postRoutes);
+app.use('/users', userRoutes);
 //Mongoose connection to MongoDB
 mongoose.connect((process.env.MONGO_URL || settings.mongo_url), {
     useNewUrlParser: true,
