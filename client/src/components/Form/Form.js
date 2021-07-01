@@ -8,10 +8,12 @@ import { createPost, updatePost } from './../../actions/posts';
 const Form = ({ currentId, setCurrentId })=>{
   const classes = useStyles();
   const [postData, setPostData] = useState({
-    creator:'', title:'', message:'', tags: '', selectedFile:''
+    title:'', message:'', tags: '', selectedFile:''
   });
   const dispatch = useDispatch();
   const post = useSelector( state => currentId ? state.posts.find(post => post._id === currentId) : null );
+  //Get User from the Local Storage
+  const user = JSON.parse(localStorage.getItem('profile'));
 
   useEffect(()=>{
     if(post){
@@ -23,10 +25,10 @@ const Form = ({ currentId, setCurrentId })=>{
     e.preventDefault();
     if(currentId){
       //Dispatching an action
-      dispatch(updatePost(currentId, postData))
+      dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }));
     }else{
       //Dispatching an action
-      dispatch(createPost(postData));
+      dispatch(createPost({ ...postData, name: user?.result?.name }));
     }
     clearForm();
   };
@@ -35,21 +37,23 @@ const Form = ({ currentId, setCurrentId })=>{
     setCurrentId(null);
     // Local state
     setPostData({
-      creator:'', title:'', message:'', tags:'', selectedFile:''
+      title:'', message:'', tags:'', selectedFile:''
     });
   };
+  //If a User is not logged in
+  if(!user?.result?.name){
+    return (
+      <Paper className={ classes.paper }>
+        <Typography variant="h6" align="center">
+          You have to Sign in to leave a post
+        </Typography>
+      </Paper>
+    );
+  }
   return (
     <Paper className={ classes.paper }>
       <form autoComplete="off" noValidate className={ `${classes.root} ${classes.form}` } onSubmit={handleSubmit}>
         <Typography variant="h6">{currentId ? 'Editing' : 'Creating'} an Event of life</Typography>
-        <TextField 
-          name="creator" 
-          variant="outlined" 
-          label="Creator" 
-          fullWidth 
-          value={postData.creator}
-          onChange={ (e)=> setPostData({ ...postData, creator: e.target.value }) }
-        />
         <TextField 
           name="title" 
           variant="outlined" 
