@@ -9,6 +9,7 @@ const auth = async (req, res, next)=>{
     let decodedData;
     //If token exists and it's our own
     if(token && isCustomAuth){
+      //jwt.verify(token, 'secret', {clockTimestamp: new Date().getTime()}, callback)
       decodedData = jwt.verify(token, 'secret');
       //Add User data to 'req'
       req.userId = decodedData?.id;
