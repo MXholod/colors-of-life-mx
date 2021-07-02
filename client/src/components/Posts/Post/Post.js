@@ -1,16 +1,19 @@
 import React from 'react';
 import { Card, CardActions, CardContent, CardMedia, Button, Typography } from '@material-ui/core';
-import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import moment from 'moment';
 import useStyles from './styles';
 import { useDispatch } from 'react-redux';
 import { deletePost, likePost } from './../../../actions/posts';
+import Likes from './../../Likes/Likes';
 
 const Post = ({ post, setCurrentId })=>{
   const dispatch = useDispatch();
   const classes = useStyles();
+  //Get User from the Local Storage
+  const user = JSON.parse(localStorage.getItem('profile'));
+
     return (
       <Card className={ classes.card }>
         <CardMedia 
@@ -45,11 +48,12 @@ const Post = ({ post, setCurrentId })=>{
           </Typography>
         </CardContent>
         <CardActions className={ classes.cardActions }>
-          <Button size="small" color="primary" onClick={ ()=>{
+          <Button size="small" color="primary" 
+            disabled={ !user?.result }
+            onClick={ ()=>{
             dispatch(likePost(post._id));
           } }>
-            <ThumbUpAltIcon fontSize="small" />
-            &nbsp; Like &nbsp; { post.likeCount }
+            <Likes user={user} post={post} />
           </Button>
           <Button size="small" color="primary" onClick={ ()=>{ 
             dispatch(deletePost(post._id));
