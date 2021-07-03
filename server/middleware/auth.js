@@ -9,18 +9,25 @@ const auth = async (req, res, next)=>{
     let decodedData;
     //If token exists and it's our own
     if(token && isCustomAuth){
-      //jwt.verify(token, 'secret', {clockTimestamp: new Date().getTime()}, callback)
-      decodedData = jwt.verify(token, 'secret');
-      //Add User data to 'req'
-      req.userId = decodedData?.id;
+      const clockTimestamp = Math.floor(new Date().getTime() / 1000);
+      jwt.verify(token, 'secret', { clockTimestamp }, function(err, decoded){
+        if(err) return res.status(401).json({ message: "You are unauthorized" });
+        if(decoded && decoded.id){
+          //Add User data to 'req'
+          req.userId = decoded.id;
+          next();
+        }else{
+          return res.status(401).json({ message: 'Unauthorized' });
+        }
+      });
     }else{
       //Google OAuth token
       decodedData = jwt.decode(token);
       //Add User data to 'req'. 'sub' is a Google's name for a specific 'id'
       req.userId = decodedData?.sub;
+      //For example: User have permissons to like a Post then go to 'like controller'
+      if(req.userId) next();
     }
-    //For example: User have permissons to like a Post then go to 'like controller'
-    next();
   }catch(e){
     console.log(e);
   }
