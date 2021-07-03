@@ -10,6 +10,20 @@ API.interceptors.request.use( req => {
   return req;
 });
 
+/*// Add a 401 response interceptor
+API.interceptors.response.use(function (response) {
+  return response;
+}, function (error) {
+  if (401 === error.response.status) {
+    //console.log("Error ",error.response);
+    return error.response;
+      // handle error: inform user, go to login, etc
+  } else {
+    return Promise.reject(error);
+  }
+  //return error;
+});*/
+
 //Posts
 export const fetchPosts = () => API.get('/posts');
 
