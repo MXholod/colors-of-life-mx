@@ -3,6 +3,7 @@ import { Card, CardActions, CardContent, CardMedia, Button, Typography } from '@
 import DeleteIcon from '@material-ui/icons/Delete';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import moment from 'moment';
+import { useHistory } from 'react-router';
 import useStyles from './styles';
 import { useDispatch } from 'react-redux';
 import { deletePost, likePost } from './../../../actions/posts';
@@ -13,6 +14,7 @@ const Post = ({ post, setCurrentId })=>{
   const classes = useStyles();
   //Get User from the Local Storage
   const user = JSON.parse(localStorage.getItem('profile'));
+  const history = useHistory();
 
     return (
       <Card className={ classes.card }>
@@ -53,13 +55,13 @@ const Post = ({ post, setCurrentId })=>{
           <Button size="small" color="primary" 
             disabled={ !user?.result }
             onClick={ ()=>{
-            dispatch(likePost(post._id));
+            dispatch(likePost(post._id, history));
           } }>
             <Likes user={user} post={post} />
           </Button>
           { (user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
             <Button size="small" color="primary" onClick={ ()=>{ 
-              dispatch(deletePost(post._id));
+              dispatch(deletePost(post._id, history));
             } }>
               <DeleteIcon fontSize="small" />
               Delete
