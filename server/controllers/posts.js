@@ -75,3 +75,22 @@ export const likePost = async (req, res)=>{
         res.status(404).json({ message: e.message });
     }
 };
+
+// QUERY   /posts?page=1  it means page = 1  req.query.page = 1
+// PARAMS  /posts/:id  If  /posts/1  it means  req.params.id = 1      
+export const getPostBySearch = async (req, res)=>{
+    const { searchQuery, tags } = req.query;
+    try{ 
+        const title = new RegExp(searchQuery, 'i');
+        //Find all the Posts that matched one of those two criteria
+        // $or - means one from the array
+        // $in - operator takes an array as its value. {"breed" : { $in : ["Pitbull", "Great Dane", "Pug"]}}
+        const posts = await PostMessage.find({ $or: [
+            { title },
+            { tags: { $in: tags.split(',') } }
+        ] });
+        res.status(200).json({ data: posts });
+    }catch(e){
+        res.status(404).json({ message: e.message });
+    }
+};
