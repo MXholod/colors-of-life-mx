@@ -4,7 +4,8 @@ import {
     createPost,
     updatePost,
     deletePost,
-    likePost
+    likePost,
+    getPostBySearch
 } from './../controllers/posts';
 
 import auth from './../middleware/auth';
@@ -21,5 +22,7 @@ router.patch('/:id', auth, updatePost);
 router.delete('/:id', auth, deletePost);
 // http://localhost:5000/posts/12/likePost
 router.patch('/:id/likePost', auth, likePost);
+// // http://localhost:5000/posts/search?searchQuery=val1&tags=val2
+router.get('/search', getPostBySearch);
 
 export default router;
