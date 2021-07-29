@@ -4,7 +4,8 @@ import {
     CREATE_POST,
     UPDATE_POST,
     DELETE_POST,
-    LIKE_POST
+    LIKE_POST,
+    FETCH_BY_SEARCH
  } from './../constants/actionTypes';
 /*
 //Action creator without 'redux-thunk'
@@ -35,6 +36,15 @@ export const getPosts = ()=> async (dispatch)=> {
     try{
         const { data } = await api.fetchPosts();
         dispatch({ type: FETCH_ALL_POST, payload: data });
+    }catch(e){
+        //console.log(e.message);
+    }
+}
+export const getPostBySearch = (searchQuery)=> async (dispatch)=> {
+    try{
+        const { data: { data } } = await api.fetchPostBySearch(searchQuery);
+        //console.log("Data ",data);
+        dispatch({ type: FETCH_BY_SEARCH, payload: data });
     }catch(e){
         //console.log(e.message);
     }
