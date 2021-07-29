@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { getPosts } from './../../actions/posts';
+import { getPosts, getPostBySearch } from './../../actions/posts';
 import { Container, Grow, Grid, Paper, AppBar, TextField, Button } from '@material-ui/core';
 import useStyles from './styles';
 import Posts from './../Posts/Posts';
@@ -42,8 +42,11 @@ const deleteTag = (tag)=>{
 };
 //Searching post
 const searchPost = ()=>{
-  if(search.trim()){
+  if(search.trim() || tags){
     //Dispatch - fetch search post
+    dispatch(getPostBySearch({ search, tags: tags.join(',') }));
+    //Go to the searching Post. Create URL on client side.
+    history.push(`posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`);
   }else{
     history.push('/');
   }
