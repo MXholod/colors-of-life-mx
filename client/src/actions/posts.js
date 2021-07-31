@@ -32,9 +32,9 @@ const unauthorized = (e, dispatch, history)=>{
     }
 };
 //Action Creators
-export const getPosts = ()=> async (dispatch)=> {
+export const getPosts = (page)=> async (dispatch)=> {
     try{
-        const { data } = await api.fetchPosts();
+        const { data } = await api.fetchPosts(page);
         dispatch({ type: FETCH_ALL_POST, payload: data });
     }catch(e){
         //console.log(e.message);
