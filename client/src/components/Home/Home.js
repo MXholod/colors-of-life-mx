@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { getPosts, getPostBySearch } from './../../actions/posts';
+import { getPostBySearch } from './../../actions/posts';
 import { Container, Grow, Grid, Paper, AppBar, TextField, Button } from '@material-ui/core';
 import useStyles from './styles';
 import Posts from './../Posts/Posts';
@@ -84,9 +84,11 @@ const searchPost = ()=>{
               </Button>
             </AppBar>
             <Form currentId={ currentId } setCurrentId={ setCurrentId } />
-            <Paper elevation={ 6 }>
-              <PaginationBlock page={ page } />
-            </Paper>
+            { (!searchQuery && !tags.length) && (
+              <Paper elevation={ 6 } className={ classes.pagination }>
+                <PaginationBlock page={ page } />
+              </Paper>
+            ) }
           </Grid>
         </Grid>
       </Container>
