@@ -5,7 +5,9 @@ import {
     UPDATE_POST,
     DELETE_POST,
     LIKE_POST,
-    FETCH_BY_SEARCH
+    FETCH_BY_SEARCH,
+    START_LOADING,
+    END_LOADING
  } from './../constants/actionTypes';
 /*
 //Action creator without 'redux-thunk'
@@ -34,25 +36,31 @@ const unauthorized = (e, dispatch, history)=>{
 //Action Creators
 export const getPosts = (page)=> async (dispatch)=> {
     try{
+        dispatch({ type: START_LOADING });
         const { data } = await api.fetchPosts(page);
         dispatch({ type: FETCH_ALL_POST, payload: data });
+        dispatch({ type: END_LOADING });
     }catch(e){
         //console.log(e.message);
     }
 }
 export const getPostBySearch = (searchQuery)=> async (dispatch)=> {
     try{
+        dispatch({ type: START_LOADING });
         const { data: { data } } = await api.fetchPostBySearch(searchQuery);
         //console.log("Data ",data);
         dispatch({ type: FETCH_BY_SEARCH, payload: data });
+        dispatch({ type: END_LOADING });
     }catch(e){
         //console.log(e.message);
     }
 }
 export const createPost = (post, history)=> async (dispatch)=> {
     try{
+        dispatch({ type: START_LOADING });
         const { data } = await api.createPost(post);
         dispatch({ type: CREATE_POST, payload: data });
+        dispatch({ type: END_LOADING });
     }catch(e){
         //console.log(e.message);
         unauthorized(e, dispatch, history);
