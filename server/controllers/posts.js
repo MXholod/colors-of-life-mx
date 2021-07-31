@@ -2,11 +2,22 @@ import mongoose from 'mongoose';
 import PostMessage from './../models/postMessage';
 
 export const getPosts = async (req, res)=>{
+    const { page } = req.query;
     try{
-        const postMessages = await PostMessage.find();
+        //Calculate numbers of posts per page
+        const LIMIT = 8;//Limit of posts on a page
+        //Calculate the starting index of every page
+        const startIndex = (Number(page) - 1) * LIMIT;
+        //Count all the documents (Posts)
+        const totalPosts = await PostMessage.countDocuments({});
+        // sort({ _id: -1 }) - From the newest to the oldest, this gives us the newest first
+        const postMessages = await PostMessage.find().sort({ _id: -1 }).limit(LIMIT).skip(startIndex);
         //console.log('All messages ', postMessages);
-        
-        res.status(200).json(postMessages);
+        res.status(200).json({ 
+            data: postMessages,
+            currentPage: Number(page),
+            numberOfPages: Math.ceil(totalPosts / LIMIT) 
+        });
     }catch(e){
         res.status(404).json({ message: e.message });
     }
