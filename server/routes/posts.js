@@ -1,5 +1,6 @@
 import express from 'express';
 import { 
+    getPost,
     getPosts,
     createPost,
     updatePost,
@@ -12,6 +13,8 @@ import auth from './../middleware/auth';
 
 const router = express.Router();
 
+// http://localhost:5000/posts/id
+router.get('/:id', getPost);
 // http://localhost:5000/posts
 router.get('/', getPosts);
 // http://localhost:5000/posts
