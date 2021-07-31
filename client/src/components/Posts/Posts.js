@@ -7,12 +7,15 @@ import useStyles from './styles';
 const Posts = ({ setCurrentId })=>{
     const classes = useStyles();
     //The state is the whole global Redux store
-    const { posts } = useSelector((state)=>{
+    const { posts, isLoading } = useSelector((state)=>{
         //'posts' - from 'combineReducers({ posts: posts })' where it's a key 
         return state.posts;
     });
+
+    if(!posts?.length && !isLoading) return "There are no posts!";
+
     return (
-      !posts?.length ? <CircularProgress /> : (
+      isLoading ? <CircularProgress /> : (
           <Grid className={ classes.container } 
             container
             alignItems="stretch"
