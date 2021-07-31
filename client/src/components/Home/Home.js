@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { getPosts, getPostBySearch } from './../../actions/posts';
 import { Container, Grow, Grid, Paper, AppBar, TextField, Button } from '@material-ui/core';
@@ -23,11 +23,6 @@ const Home = ()=>{
   const searchQuery = query.get('searchQuery');
   const [search, setSearch] = useState('');
   const [tags, setTags] = useState([]);
-
-  useEffect(()=>{
-    //Pass getPosts() to the Reducer
-    dispatch(getPosts());
-  },[dispatch]);//[currentId, dispatch]
 
 const handleKeyPress = (e)=>{
   if(e.keyCode === 13){//That's 'Enter'
@@ -90,7 +85,7 @@ const searchPost = ()=>{
             </AppBar>
             <Form currentId={ currentId } setCurrentId={ setCurrentId } />
             <Paper elevation={ 6 }>
-              <PaginationBlock />
+              <PaginationBlock page={ page } />
             </Paper>
           </Grid>
         </Grid>
