@@ -25,7 +25,7 @@ API.interceptors.response.use(function (response) {
 });*/
 
 //Posts
-export const fetchPosts = () => API.get('/posts');
+export const fetchPosts = (page) => API.get(`/posts?page=${page}`);
 
 export const fetchPostBySearch = (searchQuery) => API.get(`/posts/search?searchQuery=${searchQuery.search || 'none'}&tags=${searchQuery.tags}`);
 
