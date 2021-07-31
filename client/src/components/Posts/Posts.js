@@ -7,12 +7,12 @@ import useStyles from './styles';
 const Posts = ({ setCurrentId })=>{
     const classes = useStyles();
     //The state is the whole global Redux store
-    const posts = useSelector((state)=>{
+    const { posts } = useSelector((state)=>{
         //'posts' - from 'combineReducers({ posts: posts })' where it's a key 
         return state.posts;
     });
     return (
-      !posts.length ? <CircularProgress /> : (
+      !posts?.length ? <CircularProgress /> : (
           <Grid className={ classes.container } 
             container
             alignItems="stretch"
