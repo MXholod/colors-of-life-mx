@@ -21,6 +21,9 @@ export default makeStyles(() => ({
         height: '100%',
         position: 'relative'
     },
+    name: {
+        fontSize: '0.9em'
+    },
     overlay: {
         position: 'absolute',
         top: '20px',
@@ -31,7 +34,8 @@ export default makeStyles(() => ({
         position: 'absolute',
         top: '20px',
         right: '20px',
-        color: 'white'
+        color: 'white',
+        zIndex: '1001'
     },
     grid: {
         display: 'flex'
