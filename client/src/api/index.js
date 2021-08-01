@@ -25,7 +25,7 @@ API.interceptors.response.use(function (response) {
 });*/
 
 //Posts
-export const fetchPost = (id) => API.get(`/posts/${id}`);
+export const fetchPost = (id) => API.get(`/posts/post/${id}`);
 
 export const fetchPosts = (page) => API.get(`/posts?page=${page}`);
 
