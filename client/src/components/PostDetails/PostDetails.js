@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { useParams, useHistory } from 'react-router';
 import { getPost, getPostBySearch } from './../../actions/posts';
+import Comments from './Comments/Comments';
 
 import useStyles from './styles';
 
@@ -51,7 +52,7 @@ const openPost = (id) => history.push(`/posts/${id}`);
           <Divider style={ {margin: '20px 0'} } />
           <Typography variant="body1"><strong>Chat coming soon</strong></Typography>
           <Divider style={ {margin: '20px 0'} } />
-          <Typography variant="body1"><strong>Comments coming soon</strong></Typography>
+          <Comments post={ post } />
           <Divider style={ {margin: '20px 0'} } />
         </div>
         <div className={ classes.imageSection }>
