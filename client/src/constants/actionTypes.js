@@ -5,6 +5,7 @@ export const FETCH_ALL_POST = 'FETCH_ALL_POST';
 export const FETCH_POST = 'FETCH_POST';
 export const FETCH_BY_SEARCH = 'FETCH_BY_SEARCH';
 export const LIKE_POST = 'LIKE_POST';
+export const COMMENT_POST = 'COMMENT_POST';
 
 export const AUTH = 'AUTH';
 export const LOGOUT = 'LOGOUT';
