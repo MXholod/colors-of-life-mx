@@ -6,6 +6,7 @@ import {
   DELETE_POST,
   LIKE_POST,
   FETCH_BY_SEARCH,
+  COMMENT_POST,
   START_LOADING,
   END_LOADING
 } from './../constants/actionTypes';
@@ -28,6 +29,15 @@ const posts = (state = initialState, action)=>{
     case CREATE_POST: return { ...state, posts: [ ...state.posts, action.payload] };
     case UPDATE_POST: return { ...state, posts: state.posts.map( post => post._id === action.payload._id ? action.payload : post) };
     case LIKE_POST: return { ...state, posts: state.posts.map( post => post._id === action.payload.postUpdated._id ? action.payload.postUpdated : post) };
+    case COMMENT_POST: return {
+      ...state, posts: state.posts.map( post => {
+        if(post._id === action.payload._id){
+          return action.payload;
+        }else{
+          return post;
+        }
+      })
+    }
     case DELETE_POST: return {...state, posts:  state.posts.filter( post => post._id !== action.payload ? true : false) };
     case FETCH_POST: return { ...state, post: action.payload };
     case FETCH_BY_SEARCH: return { ...state, posts: action.payload };
