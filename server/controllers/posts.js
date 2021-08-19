@@ -118,3 +118,19 @@ export const getPostBySearch = async (req, res)=>{
         res.status(404).json({ message: e.message });
     }
 };
+
+export const addComment = async (req, res)=>{
+    const { id } = req.params;
+    const { comment } = req.body;
+    try{
+        const post = await PostMessage.findById(id);
+        if(post){
+            post.comments.push(comment);
+            const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
+            return res.status(201).json({ message: "Comment created", updatedPost });
+        }
+        res.status(404).json({ message: e.message });
+    }catch(e){
+        res.status(404).json({ message: e.message });
+    }
+}
