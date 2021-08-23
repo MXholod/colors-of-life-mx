@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardActions, CardContent, CardMedia, Button, Typography, ButtonBase } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
@@ -6,21 +6,47 @@ import moment from 'moment';
 import { useHistory } from 'react-router';
 import useStyles from './styles';
 import { useDispatch } from 'react-redux';
-import { deletePost, likePost } from './../../../actions/posts';
+import { likePost, deletePost } from './../../../actions/posts';
 import Likes from './../../Likes/Likes';
 
 const Post = ({ post, setCurrentId })=>{
   const dispatch = useDispatch();
   const classes = useStyles();
+  //This state needs when 'Likes' mounted or changes the state when dispatch() 
+  const [postLikeInitial, setPostLikeInitial] = useState(false);
+  //This state always changes when clicking 'Likes' button in child 
+  const [postLikeEachChange, setPostLikeEachChange] = useState(false);
   //Get User from the Local Storage
   const user = JSON.parse(localStorage.getItem('profile'));
+  const userId = (user?.result?.googleId || user?.result?._id);
   const history = useHistory();
-
+  
   const openPost = (e)=>{
     history.push(`/posts/${post._id}`);
   }
+  //It calls when 'Likes' componentDidMount and componentDidUpdate
+  const likeWatcherHandler = (likeState, onMount = false)=>{
+    //'likeState' will be changed if 'postLike' is different from it
+    //Changes each time when click on 'like' button
+    setPostLikeEachChange(likeState);
+    //Works only if 'Likes' componentDidMount
+    if(onMount){
+      setPostLikeInitial(likeState);
+    }
+  }
+  //Calls when leaves a post limits
+  const leavePostHandler = (e)=>{
+    //Compare like state. If they are different - dispatch() the data. If not do nothing
+    if(postLikeInitial !== postLikeEachChange){
+      //Set new state according to the changed state of 'Likes' component 
+      setPostLikeInitial(postLikeEachChange);
+      //Send an action
+      dispatch(likePost(post._id, history));
+    }
+  }
+
     return (
-      <Card className={ classes.card } raised elevation={6}>
+      <Card className={ classes.card } raised elevation={6} onMouseLeave={ leavePostHandler }>
         <ButtonBase className={ classes.cardActionsTop } onClick={ openPost }></ButtonBase>
         <CardMedia 
           className={ classes.media }
@@ -31,7 +57,7 @@ const Post = ({ post, setCurrentId })=>{
           <Typography variant="h6" className={ classes.name }>{ post.name }</Typography>
           <Typography variant="body2">{ moment(post.createdAt).fromNow() }</Typography>
         </div>
-        { (user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
+        { (userId === post?.creator || userId === post?.creator) && (
           <div className={ classes.overlay2 }>
             <Button 
               style={ {color: 'white'} }
@@ -56,14 +82,10 @@ const Post = ({ post, setCurrentId })=>{
           </Typography>
         </CardContent>
         <CardActions className={ classes.cardActions }>
-          <Button size="small" color="primary" 
-            disabled={ !user?.result }
-            onClick={ ()=>{
-            dispatch(likePost(post._id, history));
-          } }>
-            <Likes user={user} post={post} />
-          </Button>
-          { (user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
+      
+        <Likes userId={userId} post={post} likeWatcher={ likeWatcherHandler } />
+        
+          { (userId === post?.creator || userId === post?.creator) && (
             <Button size="small" color="primary" onClick={ ()=>{ 
               dispatch(deletePost(post._id, history));
             } }>
